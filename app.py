@@ -17,11 +17,11 @@ records = db.users
 
 # assign URLs to have a particular route
 @app.route("/register", methods=['post', 'get'])
-def index():
+def register():
     message = ''
     # if method post in index
     if "email" in session:
-        return redirect(url_for("logged_in"))
+        return redirect(url_for("index"))
     if request.method == "POST":
         user = request.form.get("fullname")
         email = request.form.get("email")
@@ -32,34 +32,26 @@ def index():
         email_found = records.find_one({"email": email})
         if user_found:
             message = 'There already is a user by that name'
-            return render_template('index.html', message=message)
+            return render_template('register.html', message=message)
         if email_found:
             message = 'This email already exists in database'
-            return render_template('index.html', message=message)
+            return render_template('register.html', message=message)
         if password1 != password2:
             message = 'Passwords should match!'
-            return render_template('index.html', message=message)
+            return render_template('register.html', message=message)
         else:
-            # hash the password and encode it
             hashed = bcrypt.hashpw(password2.encode('utf-8'), bcrypt.gensalt())
-            # assing them in a dictionary in key value pairs
             user_input = {'name': user, 'email': email, 'password': hashed}
-            # insert it in the record collection
             records.insert_one(user_input)
-
-            # find the new created account and its email
-            user_data = records.find_one({"email": email})
-            new_email = user_data['email']
-            # if registered redirect to logged in as the registered user
-            return render_template('logged_in.html', email=new_email)
-    return render_template('index.html')
+            return redirect(url_for("index"))
+    return render_template('register.html')
 
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
     message = 'Please login to your account'
     if "email" in session:
-        return redirect(url_for("logged_in"))
+        return redirect(url_for("index"))
 
     if request.method == "POST":
         email = request.form.get("email")
@@ -73,10 +65,10 @@ def login():
             # encode the password and check if it matches
             if bcrypt.checkpw(password.encode('utf-8'), passwordcheck):
                 session["email"] = email_val
-                return redirect(url_for('logged_in'))
+                return redirect(url_for('index'))
             else:
                 if "email" in session:
-                    return redirect(url_for("logged_in"))
+                    return redirect(url_for("index"))
                 message = 'Wrong password'
                 return render_template('login.html', message=message)
         else:
@@ -85,25 +77,16 @@ def login():
     return render_template('login.html', message=message)
 
 
-@app.route('/logged_in')
-def logged_in():
-    if "email" in session:
-        email = session["email"]
-        return render_template('logged_in.html', email=email)
-    else:
-        return redirect(url_for("login"))
-
-
 @app.route("/logout", methods=["POST", "GET"])
 def logout():
     if "email" in session:
         session.pop("email", None)
-        return render_template("signout.html")
-    else:
-        return render_template('index.html')
+    return redirect(url_for('index'))
 
-@app.route("/register", methods=['post', 'get'])
+
+@app.route("/", methods=['post', 'get'])
 def index():
+    return render_template('index.html', email=session.get("email"))
 
 
 if __name__ == "__main__":
