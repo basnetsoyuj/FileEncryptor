@@ -7,8 +7,41 @@
 You are currently not logged in. Please <a href="/login">Login</a> to our system or <a href="/register">Register</a>.
 
 {% else %}
-<p>Hello You have Logged in as {{ email }}</p>
-<a href="/logout">Logout</a>
-
+<p>
+    Hello You have Logged in as {{ email }}
+    <a href="/logout">(Logout)</a>
+</p>
+<form action="/" method="POST">
+    <label>
+        Your Public Key:<br>
+        <textarea name="pubkey" disabled rows="10" cols="50">{{ pubkey }}</textarea>
+    </label>
+    <br>
+    <label>
+        Your Private Key:<br>
+        <textarea name="private_key" disabled rows="10" cols="50">{{ private_key }}</textarea>
+    </label>
+    <br>
+    <label>
+        Encrypt
+        <input type="radio" value="encrypt" name="toggle" checked/>
+    </label>
+    <label>
+        Decrypt
+        <input type="radio" value="decrypt" name="toggle"/>
+    </label>
+    <br>
+    <label>
+        Raw Text <br>
+        <textarea name="raw_text" placeholder="Enter plain text." rows="10" cols="50">{{ raw_text }}</textarea>
+    </label>
+    <br>
+    <label>
+        Encrypted Text <br>
+        <textarea name="encrypted_message" placeholder="Enter encrypted text." rows="10" cols="50">{{ encrypted_message }}</textarea>
+    </label>
+    <br>
+    <input type="submit"/>
+</form>
 {% endif %}
 {% endblock %}

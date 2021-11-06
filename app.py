@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect, session
 import pymongo
 import bcrypt
+import rsa
 
 # set app as a Flask instance
 app = Flask(__name__)
@@ -41,7 +42,9 @@ def register():
             return render_template('register.html', message=message)
         else:
             hashed = bcrypt.hashpw(password2.encode('utf-8'), bcrypt.gensalt())
-            user_input = {'name': user, 'email': email, 'password': hashed}
+            pubkey, private_key = rsa.newkeys(512)
+            user_input = {'name': user, 'email': email, 'password': hashed, 'public_key': pubkey.save_pkcs1(),
+                          'private_key': private_key.save_pkcs1()}
             records.insert_one(user_input)
             return redirect(url_for("index"))
     return render_template('register.html')
@@ -86,7 +89,25 @@ def logout():
 
 @app.route("/", methods=['post', 'get'])
 def index():
-    return render_template('index.html', email=session.get("email"))
+    email = session.get('email')
+    pubkey = ""
+    private_key = ""
+    if email:
+        user = records.find_one({'email': email})
+        if user:
+            pubkey = rsa.PublicKey.load_pkcs1(user.get('public_key'))
+            private_key = rsa.PrivateKey.load_pkcs1(user.get('private_key'))
+        value_dict = {'email': email, 'pubkey': pubkey.save_pkcs1().decode(), 'private_key': private_key.save_pkcs1().decode()}
+        if request.method == "POST":
+            # if request.form.get("toggle") == "encrypt":
+            print(request.form.get('toggle'))
+            value_dict['raw_text'] = request.form.get("raw_text")
+            value_dict['encrypted_message'] = str(rsa.encrypt(value_dict['raw_text'].encode('utf8'), pub_key=pubkey))
+            # else:
+            #     value_dict['encrypted_message'] = request.form.get("encrypted_message")
+            #     value_dict['raw_text'] = rsa.decrypt(value_dict['encrypted_message'], private_key)
+        return render_template('index.html', **value_dict)
+    return render_template('index.html', email=None)
 
 
 if __name__ == "__main__":
