@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}File Encryptor{% endblock %}
+
+{% block content %}
+{% if not email %}
+<p style="padding: 10px 5px">
+    You are currently not logged in. Please <a href="/login">Login</a> to our system or <a href="/register">Register</a>.
+</p>
+{% else %}
+<p style="padding: 10px 5px">
+    Hello You have Logged in as {{ email }}
+    <a href="/logout">(Logout)</a>
+</p>
+<form action="/rsa/convert_file" method="POST" enctype="multipart/form-data">
+    <div style="display: flex; flex-direction: row; justify-content: space-around;">
+        <label>
+            Your Public Key:<br>
+            <textarea name="pubkey" disabled rows="10" cols="100">{{ pubkey }}</textarea>
+        </label>
+        <br>
+        <label>
+            Your Private Key:<br>
+            <textarea name="private_key" disabled rows="10" cols="100">{{ private_key }}</textarea>
+        </label>
+    </div>
+    <br>
+    <div style="display: flex; justify-content: center">
+        <label>
+            Encrypt
+            <input type="radio" value="encrypt" name="toggle" checked/>
+        </label>
+        <label>
+            Decrypt
+            <input type="radio" value="decrypt" name="toggle"/>
+        </label>
+    </div>
+    <br>
+    <div style="display: flex; flex-direction: row; justify-content: space-around">
+        <input name="file" type="file"/>
+    </div>
+    <br>
+    <div style="display: flex; justify-content: center">
+        <input type="submit"/>
+    </div>
+</form>
+{% endif %}
+{% endblock %}

@@ -1,22 +1,62 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8">
-  <title>{% block title %}{%endblock %}</title>
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}{%endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        nav {
+            padding: 10px 5px;
+        }
 
+        textarea {
+            padding: 5px !important;
+        }
+
+        input[type="radio"] {
+            margin: 10px !important;
+        }
+
+        input[type="submit"] {
+            padding: 7px 15px;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+        }
+    </style>
 </head>
 <body>
 
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-  <a class="navbar-brand" href="/">FileEncryptor</a>
+<nav class="navbar navbar-light" style="background-color: #e3f2fd; justify-content: start !important; padding:0;">
+    <a class="navbar-brand" href="/" style="margin: 10px; width:15%">FileEncryptor</a>
+    {% if not email %}
+    <div style="padding: 0; display: flex; justify-content: right; width: calc(83% - 10px)" width="80%">
+        <a style="padding: 10px; background-color: #bfe4ff; margin: 0 10px;" href="/login">Login</a>
+        <a style="padding: 10px; background-color: #bfe4ff;" href="/register">Register</a>
+    </div>
+    {% endif %}
 </nav>
 
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
 
 {% block content %}{% endblock %}
 </body>

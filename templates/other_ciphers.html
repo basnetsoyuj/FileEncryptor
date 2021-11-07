@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}File Encryptor{% endblock %}
+
+{% block content %}
+{% if not email %}
+<p style="padding: 10px 5px">
+    You are currently not logged in. Please <a href="/login">Login</a> to our system or <a href="/register">Register</a>.
+</p>
+{% else %}
+<p style="padding: 10px 5px">
+    Hello You have Logged in as {{ email }}
+    <a href="/logout">(Logout)</a>
+</p>
+
+{% if message  %}
+<div class="alert alert-secondary" role="alert">
+    <p style="margin-top: 3px">{{ message }}</p>
+</div>
+{% endif %}
+
+<form action="/other-ciphers" method="POST" style="margin:10px">
+    <div style="display: flex; justify-content: center">
+        <label style="display: flex; margin-right: 10px;">
+            <input type="radio" value="shift" name="cipher_type" {{ cipher_type== "shift" and "checked" }}/>
+            <p style="margin: 10px">Shift Cipher</p>
+        </label>
+
+        <input type="text" name="s_shift_amount" placeholder="Shift Amount" value="{{ s_shift_amount }}"/>
+    </div>
+    <br>
+
+    <div style="display: flex; justify-content: center">
+        <label style="display: flex; margin-right: 10px;">
+            <input type="radio" value="affine" name="cipher_type" {{ cipher_type== "affine" and "checked" }}/>
+            <p style="margin: 10px">Affine Cipher</p>
+        </label>
+
+        <input type="text" name="a_coeff" style="margin-right: 10px;" placeholder="Coefficient" value="{{ a_coeff }}"/>
+        <input type="text" name="a_shift_amount" placeholder="Shift Amount" value="{{ a_shift_amount }}"/>
+    </div>
+    <br>
+    <div style="display: flex; justify-content: center">
+        <label style="display: flex; margin-right: 10px;">
+            <input type="radio" value="block" name="cipher_type" {{ cipher_type== "block" and "checked" }}/>
+            <p style="margin: 10px">Block Cipher</p>
+        </label>
+
+        <input type="text" name="b_block_size" style="margin-right: 10px;" placeholder="Block Size"
+               value="{{ b_block_size }}"/>
+        <input type="text" name="b_map" placeholder="Map" value="{{ b_map }}"/>
+    </div>
+    <br>
+    <div style="display: flex; justify-content: center">
+        <label>
+            Encrypt
+            <input type="radio" value="encrypt" name="toggle" checked/>
+        </label>
+        <label>
+            Decrypt
+            <input type="radio" value="decrypt" name="toggle"/>
+        </label>
+    </div>
+    <br>
+    <div style="display: flex; flex-direction: row; justify-content: space-around">
+        <label>
+            Raw Text <br>
+            <textarea name="raw_text" placeholder="Enter plain text." rows="10" cols="100">{{ raw_text }}</textarea>
+        </label>
+        <br>
+        <label>
+            Encrypted Text <br>
+            <textarea name="encrypted_message" placeholder="Enter encrypted text." rows="10" cols="100">{{ encrypted_message }}</textarea>
+        </label>
+    </div>
+    <br>
+    <div style="display: flex; justify-content: center">
+        <input type="submit"/>
+    </div>
+</form>
+{% endif %}
+{% endblock %}
