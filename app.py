@@ -5,13 +5,21 @@ import rsa
 from io import BytesIO, StringIO
 import random
 from Crypto.Util import number
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "test"
-client = pymongo.MongoClient("localhost", 8848)
+client = pymongo.MongoClient(os.environ.get("DB_LINK"))
 
 db = client.get_database('FileEncryptorDB')
 records = db.users
+
+
+def search(email):
+    return records.find_one({"email": email})
 
 
 class ShiftCipher:
@@ -230,10 +238,6 @@ def logout():
     if "email" in session:
         session.pop("email", None)
     return redirect(url_for('index'))
-
-
-def search(email):
-    return search(email)
 
 
 @app.route("/rsa/convert", methods=['post', 'get'])

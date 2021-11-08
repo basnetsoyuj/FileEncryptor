@@ -1,2 +1,5 @@
+.env
 mongodb/
 .idea/
+__pycache__/
+venv/
